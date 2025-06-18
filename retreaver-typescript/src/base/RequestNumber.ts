@@ -27,6 +27,8 @@ interface GATracker {
   get(key: string): any;
 }
 
+export type RequestNumberCallback = (data: any) => void;
+
 /**
  * Request number handler for Retreaver library
  * Maintains exact functionality from original request_number.js including Google Analytics integration
@@ -43,7 +45,7 @@ export class RequestNumber {
    * Perform the number request
    * @param callback - Callback to fire after request
    */
-  perform(callback: Function): void {
+  perform(callback: RequestNumberCallback): void {
     if (typeof callback !== 'function') {
       throw new Error("ArgumentError: Expected to receive a callback function");
     }

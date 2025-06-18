@@ -10,13 +10,18 @@
  * TypeScript conversion maintains exact functionality from original
  */
 
+export type PrepMatchCallback = (match: RegExpExecArray, matchIndex: number, characterOffset: number) => RegExpExecArray;
+export type ForceContextCallback = (el: Element) => boolean;
+export type ReplaceCallback = (...args: any[]) => string;
+export type RevertCallback = () => void;
+
 interface FindAndReplaceOptions {
   find: RegExp | string;
   wrap?: string | Element;
-  replace?: string | Function;
-  prepMatch?: Function;
+  replace?: string | ReplaceCallback;
+  prepMatch?: PrepMatchCallback;
   filterElements?: (el: Element) => boolean;
-  forceContext?: boolean | Function;
+  forceContext?: boolean | ForceContextCallback;
   portionMode?: string;
   preset?: string;
 }
@@ -83,7 +88,7 @@ const PRESETS: Record<string, Partial<FindAndReplaceOptions>> = {
 class Finder {
   private node: Node;
   private options: FindAndReplaceOptions;
-  private reverts: Function[] = [];
+  private reverts: RevertCallback[] = [];
   private matches: Match[];
 
   constructor(node: Node, options: FindAndReplaceOptions) {
@@ -201,9 +206,8 @@ class Finder {
           const innerText = getText(currentNode);
 
           if (
-            forceContext &&
-            currentNode.nodeType === 1 &&
-            (forceContext === true || (typeof forceContext === 'function' && forceContext(currentNode)))
+            (forceContext === true || (typeof forceContext === 'function' && forceContext(currentNode as Element))) &&
+            currentNode.nodeType === 1
           ) {
             txt[++i] = innerText;
             txt[++i] = '';
@@ -379,8 +383,8 @@ class Finder {
 
     if (typeof replacement === 'function') {
       const result = replacement(portion, match);
-      if (result && (result as Node).nodeType) {
-        return result as Node;
+      if (result && ((result as unknown) as Node).nodeType) {
+        return (result as unknown) as Node;
       }
       return document.createTextNode(String(result));
     }

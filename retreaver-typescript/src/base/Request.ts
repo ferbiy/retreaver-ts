@@ -2,6 +2,8 @@ import { Helpers } from './Helpers';
 import { Cookies } from './Cookies';
 import { RequestConfig } from '../types';
 
+export type RequestCallback = (data: any) => void;
+
 /**
  * HTTP request handler for Retreaver library
  * Maintains exact functionality from original request.js including legacy IE support
@@ -24,11 +26,11 @@ export class Request {
   getJSON<T = any>(
     requestUrl: string,
     payload?: any,
-    callbacks?: Function | Function[],
+    callbacks?: RequestCallback | RequestCallback[],
     context?: any
   ): void {
     // Ensure callbacks are an array
-    let callbackArray: Function[] = [];
+    let callbackArray: RequestCallback[] = [];
     if (typeof callbacks === "function") {
       callbackArray = [callbacks];
     } else if (Array.isArray(callbacks)) {
@@ -67,10 +69,10 @@ export class Request {
   postJSON<T = any>(
     requestUrl: string,
     payload?: any,
-    callbacks?: Function | Function[],
+    callbacks?: RequestCallback | RequestCallback[],
     context?: any
   ): void {
-    return this.getJSON(requestUrl, payload, callbacks, context);
+    this.getJSON(requestUrl, payload, callbacks, context);
   }
 
   /**
@@ -79,7 +81,7 @@ export class Request {
    * @param callbackFunctions - Callback functions
    * @param payload - Post object
    */
-  apiRequest(requestUri: string, callbackFunctions: Function | Function[], payload?: any): void {
+  apiRequest(requestUri: string, callbackFunctions: RequestCallback | RequestCallback[], payload?: any): void {
     const httpPrefix = this.config.http_prefix;
     const addr = this.config.addr;
     const urlregex = eval(this.config.urlregex);
@@ -89,7 +91,7 @@ export class Request {
       payload.visitor_id = Cookies.get('CallPixels-vid');
     }
 
-    let callbacks: Function[] = [];
+    let callbacks: RequestCallback[] = [];
     if (typeof callbackFunctions === "function") {
       callbacks = [callbackFunctions];
     } else if (Array.isArray(callbackFunctions)) {
@@ -172,7 +174,7 @@ export class Request {
    * Load scripts for IE6/7 support
    * @param callback - Callback to execute after scripts are loaded
    */
-  private withIeScripts(callback: Function): void {
+  private withIeScripts(callback: () => void): void {
     const retreaver = (window as any).Retreaver;
     if (retreaver && retreaver.easyxdm_loaded) {
       callback();
@@ -207,14 +209,14 @@ export class Request {
    * @param scriptUrl - URL of the script to load
    * @param afterCallback - Callback to execute after script loads
    */
-  loadScript(scriptUrl: string, afterCallback?: Function): void {
+  loadScript(scriptUrl: string, afterCallback?: () => void): void {
     const firstScriptElement = document.getElementsByTagName('script')[0];
     const scriptElement = document.createElement('script');
     scriptElement.type = 'text/javascript';
     scriptElement.async = false;
     scriptElement.src = scriptUrl;
 
-    const ieLoadBugFix = (element: HTMLScriptElement, callback: Function): void => {
+    const ieLoadBugFix = (element: HTMLScriptElement, callback: () => void): void => {
       if ((element as any).readyState === 'loaded' || (element as any).readyState === 'complete') {
         callback();
       } else {

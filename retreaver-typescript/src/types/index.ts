@@ -46,6 +46,7 @@ export interface TagCollection {
 export type NumberCallback = (number: RetreaverNumber) => void;
 export type ErrorCallback = (error: any) => void;
 export type CallCallback = (call: Call) => void;
+export type TagCallback = (data?: any) => void;
 
 // Integration configurations
 export interface GoogleAnalyticsConfig {
@@ -93,11 +94,11 @@ export interface RetreaverNumber {
   get(key: string): any;
   get(...keys: string[]): any;
   set(key: string, value: any): any;
-  addTags(tags: TagCollection, callback?: Function): void;
-  replaceTags(tags: TagCollection, callback?: Function): void;
-  removeTags(tags: TagCollection, callback?: Function): void;
-  removeTagsByKeys(keys: string[], callback?: Function): void;
-  clearTags(callback?: Function): void;
+  addTags(tags: TagCollection, callback?: TagCallback): void;
+  replaceTags(tags: TagCollection, callback?: TagCallback): void;
+  removeTags(tags: TagCollection, callback?: TagCallback): void;
+  removeTagsByKeys(keys: string[], callback?: TagCallback): void;
+  clearTags(callback?: TagCallback): void;
   release(): void;
   initiateCall(dial: string, payload?: any, callback?: CallCallback): void;
 }

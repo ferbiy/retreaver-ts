@@ -21,7 +21,6 @@ import {
  */
 export class Campaign extends Model {
   protected type = 'campaigns';
-  public numbers: RetreaverNumber[] = [];
 
   constructor(options: CampaignOptions) {
     super();
@@ -154,7 +153,7 @@ export class Campaign extends Model {
    * Get all numbers for this campaign
    * @returns Array of numbers matching this campaign
    */
-  getNumbers(): RetreaverNumber[] {
+  numbers(): RetreaverNumber[] {
     const output: RetreaverNumber[] = [];
     const store = Data.getStore();
     

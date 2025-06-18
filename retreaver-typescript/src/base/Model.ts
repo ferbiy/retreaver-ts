@@ -2,6 +2,9 @@ import { Helpers } from './Helpers';
 import { Data } from './Data';
 import { Request } from './Request';
 import { Cookies } from './Cookies';
+import { DataConfig } from '../types';
+
+export type ModelCallback = (data: any) => void;
 
 /**
  * Base model class for Retreaver library
@@ -56,7 +59,7 @@ export abstract class Model {
    * @param callback - Callback function
    * @returns Request result
    */
-  protected getData(path: string, callback?: Function): any {
+  protected getData(path: string, callback?: ModelCallback): any {
     const callbacks = callback ? [Model.update, callback] : [Model.update];
     return this.connection().getJSON(this.api_host_uri + path, null, callbacks, this);
   }
@@ -68,7 +71,7 @@ export abstract class Model {
    * @param callback - Callback function
    * @returns Request result
    */
-  protected postData(path: string, data: any, callback?: Function): any {
+  protected postData(path: string, data: any, callback?: ModelCallback): any {
     const callbacks = callback ? [Model.update, callback] : [Model.update];
     return this.connection().postJSON(this.api_host_uri + path, data, callbacks, this);
   }

@@ -1,6 +1,12 @@
 import { Model } from './base/Model';
 import { Helpers } from './base/Helpers';
-import { NumberAttributes, TagCollection, CallCallback, Call } from './types';
+import { 
+  NumberAttributes, 
+  TagCollection, 
+  CallCallback,
+  TagCallback,
+  Call 
+} from './types';
 
 /**
  * Number class for Retreaver library
@@ -20,48 +26,46 @@ export class RetreaverNumber extends Model {
   }
 
   /**
-   * Add tags to a number
-   * @param tags - A collection of tags {key: 'value', tag2: 'value2'}
+   * Add tags to this number
+   * @param tags - Tags to add as key-value pairs or query string
    * @param callback - Callback that will be fired after request
    * @throws Will throw an error if attempting to modify tags on a number that doesn't belong to a number pool with per-visitor numbers enabled
    */
-  addTags(tags: TagCollection | string, callback?: Function): void {
+  addTags(tags: TagCollection | string, callback?: TagCallback): void {
     this.ensureIsPerVisitor();
     this.postData('numbers/tag', this.tagsPayload(tags), callback);
   }
 
   /**
-   * Replace tags on a number. Any tags that already exist on the number that match the given keys will be
-   * removed. This can be used instead of calling removeTags and then addTags.
-   * @param tags - A collection of tags {key: 'value', tag2: 'value2'}
+   * Replace tags for this number
+   * @param tags - Tags to replace as key-value pairs
    * @param callback - Callback that will be fired after request
    * @throws Will throw an error if attempting to modify tags on a number that doesn't belong to a number pool with per-visitor numbers enabled
    */
-  replaceTags(tags: TagCollection | string, callback?: Function): void {
+  replaceTags(tags: TagCollection, callback?: TagCallback): void {
     this.ensureIsPerVisitor();
     this.postData('numbers/replace_tags', this.tagsPayload(tags), callback);
   }
 
   /**
-   * Remove tags from a number
-   * @param tags - A collection of tags {key: 'value', tag2: 'value2'}
+   * Remove tags from this number
+   * @param tags - Tags to remove as key-value pairs  
    * @param callback - Callback that will be fired after request
    * @throws Will throw an error if attempting to modify tags on a number that doesn't belong to a number pool with per-visitor numbers enabled
    */
-  removeTags(tags: TagCollection | string, callback?: Function): void {
+  removeTags(tags: TagCollection, callback?: TagCallback): void {
     this.ensureIsPerVisitor();
     this.postData('numbers/untag', this.tagsPayload(tags), callback);
   }
 
   /**
-   * Removes all tags with given keys from a number
-   * @param keys - An array of keys to remove. eg: ['key1', 'key2']
+   * Remove tags by their keys
+   * @param keys - Array of tag keys to remove
    * @param callback - Callback that will be fired after request
-   * @throws Will throw an error if attempting to modify tags on a number that doesn't belong to a number pool with per-visitor numbers enabled
    */
-  removeTagsByKeys(keys: string[] | string, callback?: Function): void {
+  removeTagsByKeys(keys: string[] | string, callback?: TagCallback): void {
     this.ensureIsPerVisitor();
-    let keyArray: string[] = typeof keys === 'string' ? keys.split(',') : keys;
+    let keyArray: string[] = typeof keys === 'string' ? [keys] : keys;
     const payload = {
       tag_keys: keyArray,
       ids: [this.get('id')],
@@ -71,11 +75,11 @@ export class RetreaverNumber extends Model {
   }
 
   /**
-   * Clear all tags from a number
+   * Clear all tags for this number
    * @param callback - Callback that will be fired after request
    * @throws Will throw an error if attempting to modify tags on a number that doesn't belong to a number pool with per-visitor numbers enabled
    */
-  clearTags(callback?: Function): void {
+  clearTags(callback?: TagCallback): void {
     this.ensureIsPerVisitor();
     const payload = {
       ids: [this.get('id')],
@@ -162,9 +166,10 @@ export class RetreaverNumber extends Model {
 }
 
 /**
- * Ping active numbers function (maintains original behavior)
+ * Ping active numbers (static utility method)
+ * @param callback - Callback function
  */
-function pingActiveNumbers(callback?: Function): void {
+function pingActiveNumbers(callback?: TagCallback): void {
   const store = (RetreaverNumber as any).getStore ? (RetreaverNumber as any).getStore() : {};
   
   if (typeof store !== 'undefined') {
