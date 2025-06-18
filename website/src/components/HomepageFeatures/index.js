@@ -5,7 +5,7 @@ import styles from './styles.module.css';
 const FeatureList = [
   {
     title: '100% TypeScript',
-    Svg: require('@site/static/img/typescript-icon.svg').default,
+    emoji: '🔧',
     description: (
       <>
         Built from the ground up in TypeScript with comprehensive type definitions.
@@ -15,7 +15,7 @@ const FeatureList = [
   },
   {
     title: 'Backward Compatible',
-    Svg: require('@site/static/img/compatibility-icon.svg').default,
+    emoji: '🔄',
     description: (
       <>
         Drop-in replacement for the original JavaScript library. All existing code
@@ -25,7 +25,7 @@ const FeatureList = [
   },
   {
     title: 'Modern & Fast',
-    Svg: require('@site/static/img/performance-icon.svg').default,
+    emoji: '⚡',
     description: (
       <>
         ES Modules, tree-shaking, multiple build targets, and modern development tools.
@@ -35,7 +35,7 @@ const FeatureList = [
   },
   {
     title: 'Third-party Ready',
-    Svg: require('@site/static/img/integrations-icon.svg').default,
+    emoji: '🔗',
     description: (
       <>
         Built-in integrations with Google Analytics, TrueCall, RedTrack, and ClickFlare.
@@ -45,7 +45,7 @@ const FeatureList = [
   },
   {
     title: 'Developer Friendly',
-    Svg: require('@site/static/img/developer-icon.svg').default,
+    emoji: '👨‍💻',
     description: (
       <>
         Comprehensive documentation, interactive examples, live playground,
@@ -55,7 +55,7 @@ const FeatureList = [
   },
   {
     title: 'Production Ready',
-    Svg: require('@site/static/img/production-icon.svg').default,
+    emoji: '🚀',
     description: (
       <>
         Battle-tested in production environments. Comprehensive error handling,
@@ -65,11 +65,19 @@ const FeatureList = [
   },
 ];
 
-function Feature({Svg, title, description}) {
+function Feature({emoji, title, description}) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
+        <div className={styles.featureSvg} style={{
+          fontSize: '4rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '200px'
+        }}>
+          {emoji}
+        </div>
       </div>
       <div className="text--center padding-horiz--md">
         <h3>{title}</h3>
