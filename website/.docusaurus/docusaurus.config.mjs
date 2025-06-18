@@ -27,7 +27,8 @@ export default {
       {
         "docs": {
           "sidebarPath": "/workspace/website/sidebars.js",
-          "editUrl": "https://github.com/retreaver/retreaverjs/tree/main/website/"
+          "editUrl": "https://github.com/retreaver/retreaverjs/tree/main/website/",
+          "path": "docs"
         },
         "blog": {
           "showReadingTime": true,
@@ -55,18 +56,13 @@ export default {
           "label": "Docs"
         },
         {
-          "to": "/api",
+          "href": "../docs/api/index.html",
           "label": "API Reference",
           "position": "left"
         },
         {
-          "to": "/playground",
+          "href": "../playground/index.html",
           "label": "Playground",
-          "position": "left"
-        },
-        {
-          "to": "/examples",
-          "label": "Examples",
           "position": "left"
         },
         {
@@ -90,15 +86,11 @@ export default {
           "items": [
             {
               "label": "Getting Started",
-              "to": "/docs/getting-started"
+              "to": "/docs/getting-started/installation"
             },
             {
               "label": "API Reference",
-              "to": "/api"
-            },
-            {
-              "label": "Examples",
-              "to": "/examples"
+              "href": "../docs/api/index.html"
             }
           ]
         },

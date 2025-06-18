@@ -39,6 +39,7 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: 'https://github.com/retreaver/retreaverjs/tree/main/website/',
+          path: 'docs',
         },
         blog: {
           showReadingTime: true,
@@ -70,18 +71,13 @@ const config = {
             label: 'Docs',
           },
           {
-            to: '/api',
+            href: '../docs/api/index.html',
             label: 'API Reference',
             position: 'left',
           },
           {
-            to: '/playground',
+            href: '../playground/index.html',
             label: 'Playground',
-            position: 'left',
-          },
-          {
-            to: '/examples',
-            label: 'Examples',
             position: 'left',
           },
           {to: '/blog', label: 'Blog', position: 'left'},
@@ -100,15 +96,11 @@ const config = {
             items: [
               {
                 label: 'Getting Started',
-                to: '/docs/getting-started',
+                to: '/docs/getting-started/installation',
               },
               {
                 label: 'API Reference',
-                to: '/api',
-              },
-              {
-                label: 'Examples',
-                to: '/examples',
+                href: '../docs/api/index.html',
               },
             ],
           },
