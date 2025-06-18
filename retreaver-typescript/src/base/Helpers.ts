@@ -50,7 +50,7 @@ export class Helpers {
    * @param arg - Value to check
    * @returns True if argument is an array
    */
-  static isArray(arg: any): arg is any[] {
+  static isArray(arg: unknown): arg is unknown[] {
     return Object.prototype.toString.call(arg) === '[object Array]';
   }
 

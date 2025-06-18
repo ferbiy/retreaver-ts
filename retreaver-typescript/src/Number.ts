@@ -124,7 +124,11 @@ export class RetreaverNumber extends Model {
    * @param tags - Tags to process
    * @returns Payload object
    */
-  private tagsPayload(tags: TagCollection | string): any {
+  private tagsPayload(tags: TagCollection | string): {
+    tag_values: TagCollection;
+    ids: number[];
+    campaign_key: string;
+  } {
     let processedTags: TagCollection;
     if (typeof tags === 'string') {
       processedTags = RetreaverNumber.extractTagsFromString(tags);
