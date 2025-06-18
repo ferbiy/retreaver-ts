@@ -1,6 +1,7 @@
 {
   "name": "@retreaver/retreaver-js",
   "version": "1.0.0",
+  "private": true,
   "description": "Retreaver JavaScript API - TypeScript edition",
   "main": "dist/index.js",
   "module": "dist/esm/index.js",
