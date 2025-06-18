@@ -18,8 +18,12 @@
     "build:dev": "tsc --watch",
     "clean": "rm -rf dist",
     "prepublishOnly": "npm run clean && npm run build",
-    "lint": "tsc --noEmit",
-    "test": "echo \"No tests specified\" && exit 0"
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "test": "ts-mocha test/**/*.test.ts",
+    "test:watch": "ts-mocha test/**/*.test.ts --watch",
+    "docs": "typedoc src/index.ts --out docs",
+    "type-check": "tsc --noEmit"
   },
   "keywords": [
     "retreaver",
@@ -69,7 +73,18 @@
     "typescript": "^5.2.0",
     "webpack": "^5.88.0",
     "webpack-cli": "^5.1.0",
-    "ts-loader": "^9.4.0"
+    "ts-loader": "^9.4.0",
+    "mocha": "^10.2.0",
+    "chai": "^4.3.0",
+    "@types/mocha": "^10.0.0",
+    "@types/chai": "^4.3.0",
+    "ts-mocha": "^10.0.0",
+    "eslint": "^8.50.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.0",
+    "@typescript-eslint/parser": "^6.7.0",
+    "typedoc": "^0.25.0",
+    "marked": "^4.3.0",
+    "terser-webpack-plugin": "^5.3.0"
   },
   "peerDependencies": {},
   "dependencies": {}

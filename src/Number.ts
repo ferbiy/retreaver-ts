@@ -116,7 +116,7 @@ export class RetreaverNumber extends Model {
     payload = Helpers.merge(this.get('id', 'campaign_key'), payload);
     
     // post the payload
-    this.postData('numbers/initiate_call', payload, callback);
+    this.postData('numbers/initiate_call', payload, callback as any);
   }
 
   /**
