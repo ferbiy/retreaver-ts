@@ -91,39 +91,6 @@ campaign.requestNumber({home_value: '50000'}, function (number) {
 </script>
 ```
 
-## 📚 Documentation
-
-This TypeScript library includes **comprehensive, developer-friendly documentation**:
-
-### 🔧 **API Reference** (Auto-Generated)
-Complete TypeScript API documentation with examples and type information.
-
-```bash
-# Generate API documentation
-npm run docs:api
-
-# Open in browser
-open docs/api/index.html
-```
-
-**Features**: Auto-generated from source code, always accurate, professional design, search functionality
-
-### 🚀 **Interactive Playground** 
-Live testing environment with pre-built examples and real-time code execution.
-
-```bash
-# Open directly in browser
-open playground/index.html
-
-# Or serve locally
-npm run playground:serve
-# Visit: http://localhost:8080/playground/
-```
-
-**Features**: Live code execution, multiple examples (basic, tags, error handling, auto-replace), shareable links
-
-**Perfect for**: Testing the library, learning through examples, prototyping integrations
-
 ## 📚 API Reference
 
 ### Campaign Class

@@ -25,7 +25,6 @@
     "test:watch": "ts-mocha test/**/*.test.ts --watch",
     "docs": "typedoc src/index.ts --out docs",
     "docs:api": "typedoc --options typedoc.enhanced.json",
-    "playground:serve": "python3 -m http.server 8080 --directory .",
     "type-check": "tsc --noEmit"
   },
   "keywords": [
