@@ -1,0 +1,58 @@
+# Source files (we ship the built dist instead)
+src/
+tsconfig*.json
+webpack.config.js
+
+# Development and build tools
+.eslintrc.json
+typedoc.json
+Gruntfile.js
+Rakefile
+
+# Ruby/Rails related files
+Gemfile*
+*.gemspec
+lib/
+
+# Examples and docs (optional, you may want to keep examples)
+examples/
+docs/
+README_old.md
+
+# Development dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build cache
+*.tsbuildinfo
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# IDE and OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+.nyc_output
+
+# Logs
+logs/
+*.log
+
+# Git
+.git/
+.gitignore
+
+# Temporary
+tmp/
+temp/
