@@ -24,6 +24,7 @@
     "test": "ts-mocha test/**/*.test.ts",
     "test:watch": "ts-mocha test/**/*.test.ts --watch",
     "docs": "typedoc src/index.ts --out docs",
+    "docs:api": "typedoc --options typedoc.enhanced.json",
     "type-check": "tsc --noEmit"
   },
   "keywords": [
