@@ -1,0 +1,38 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/retreaverjs/docs",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/retreaverjs/docs",
+          "mainDocId": "intro",
+          "docs": [
+            {
+              "id": "getting-started/installation",
+              "path": "/retreaverjs/docs/getting-started/installation",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "intro",
+              "path": "/retreaverjs/docs/intro",
+              "sidebar": "tutorialSidebar"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "tutorialSidebar": {
+              "link": {
+                "path": "/retreaverjs/docs/intro",
+                "label": "intro"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    }
+  }
+}

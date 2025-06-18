@@ -1,0 +1,79 @@
+{
+  "/retreaverjs/__docusaurus/debug-e55": {
+    "__comp": "__comp---theme-debug-config-23-a-2ff",
+    "__context": {
+      "plugin": "plugin---retreaverjs-docusaurus-debugb-38-1db"
+    }
+  },
+  "/retreaverjs/__docusaurus/debug/config-aaa": {
+    "__comp": "__comp---theme-debug-config-23-a-2ff",
+    "__context": {
+      "plugin": "plugin---retreaverjs-docusaurus-debugb-38-1db"
+    }
+  },
+  "/retreaverjs/__docusaurus/debug/content-3d0": {
+    "__comp": "__comp---theme-debug-contentba-8-ce7",
+    "__context": {
+      "plugin": "plugin---retreaverjs-docusaurus-debugb-38-1db"
+    },
+    "__props": "__props---retreaverjs-docusaurus-debug-content-40-e-fee"
+  },
+  "/retreaverjs/__docusaurus/debug/globalData-487": {
+    "__comp": "__comp---theme-debug-global-dataede-0fa",
+    "__context": {
+      "plugin": "plugin---retreaverjs-docusaurus-debugb-38-1db"
+    }
+  },
+  "/retreaverjs/__docusaurus/debug/metadata-f6c": {
+    "__comp": "__comp---theme-debug-site-metadata-68-e-3d4",
+    "__context": {
+      "plugin": "plugin---retreaverjs-docusaurus-debugb-38-1db"
+    }
+  },
+  "/retreaverjs/__docusaurus/debug/registry-9c2": {
+    "__comp": "__comp---theme-debug-registry-679-501",
+    "__context": {
+      "plugin": "plugin---retreaverjs-docusaurus-debugb-38-1db"
+    }
+  },
+  "/retreaverjs/__docusaurus/debug/routes-d02": {
+    "__comp": "__comp---theme-debug-routes-946-699",
+    "__context": {
+      "plugin": "plugin---retreaverjs-docusaurus-debugb-38-1db"
+    }
+  },
+  "/retreaverjs/search-2c8": {
+    "__comp": "__comp---theme-search-page-1-a-4-d6f",
+    "__context": {
+      "plugin": "plugin---retreaverjs-searchc-14-ee0"
+    }
+  },
+  "/retreaverjs/docs-04c": {
+    "__comp": "__comp---theme-docs-root-5-e-9-0b6",
+    "__context": {
+      "plugin": "plugin---retreaverjs-docsaba-208"
+    }
+  },
+  "/retreaverjs/docs-0df": {
+    "__comp": "__comp---theme-doc-version-roota-7-b-5de",
+    "__props": "__props---retreaverjs-docs-365-1ae"
+  },
+  "/retreaverjs/docs-5a9": {
+    "__comp": "__comp---theme-doc-roota-94-67a"
+  },
+  "/retreaverjs/docs/getting-started/installation-3f1": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---retreaverjs-docs-getting-started-installation-54-f-068"
+  },
+  "/retreaverjs/docs/intro-f93": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---retreaverjs-docs-intro-0-e-3-777"
+  },
+  "/retreaverjs/-328": {
+    "__comp": "__comp---site-src-pages-index-jsc-4-f-f99",
+    "__context": {
+      "plugin": "plugin---retreaverjs-a-74-d11"
+    },
+    "config": "config---retreaverjs-5-e-9-18e"
+  }
+}

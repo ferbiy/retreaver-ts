@@ -21,61 +21,23 @@ const sidebars = {
       label: 'Getting Started',
       items: [
         'getting-started/installation',
-        'getting-started/quick-start',
-        'getting-started/configuration',
-        'getting-started/migration-guide',
+        // Add more docs here as you create them:
+        // 'getting-started/quick-start',
+        // 'getting-started/configuration',
+        // 'getting-started/migration-guide',
       ],
     },
-    {
-      type: 'category',
-      label: 'Core Concepts',
-      items: [
-        'core/campaigns',
-        'core/numbers',
-        'core/tags',
-        'core/call-tracking',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'API Reference',
-      items: [
-        'api/campaign',
-        'api/number',
-        'api/configuration',
-        'api/types',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Integrations',
-      items: [
-        'integrations/google-analytics',
-        'integrations/truecall',
-        'integrations/redtrack',
-        'integrations/clickflare',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Examples',
-      items: [
-        'examples/basic-usage',
-        'examples/react-integration',
-        'examples/wordpress',
-        'examples/advanced-tracking',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Advanced',
-      items: [
-        'advanced/typescript',
-        'advanced/bundling',
-        'advanced/performance',
-        'advanced/debugging',
-      ],
-    },
+    // Add more categories as you create the documentation:
+    // {
+    //   type: 'category',
+    //   label: 'Core Concepts',
+    //   items: [
+    //     'core/campaigns',
+    //     'core/numbers',
+    //     'core/tags',
+    //     'core/call-tracking',
+    //   ],
+    // },
   ],
 
   // But you can create a sidebar manually

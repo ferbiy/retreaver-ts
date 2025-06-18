@@ -1,8 +1,9 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const {themes} = require('prism-react-renderer');
+const lightCodeTheme = themes.github;
+const darkCodeTheme = themes.dracula;
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -169,17 +170,18 @@ const config = {
 
   themes: ['@docusaurus/theme-live-codeblock'],
   
-  plugins: [
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'api',
-        path: '../docs/api',
-        routeBasePath: 'api',
-        sidebarPath: require.resolve('./sidebars.api.js'),
-      },
-    ],
-  ],
+  // Removed the API docs plugin for now since it conflicts with TypeDoc
+  // plugins: [
+  //   [
+  //     '@docusaurus/plugin-content-docs',
+  //     {
+  //       id: 'api',
+  //       path: '../docs/api',
+  //       routeBasePath: 'api',
+  //       sidebarPath: require.resolve('./sidebars.api.js'),
+  //     },
+  //   ],
+  // ],
 };
 
 module.exports = config;
