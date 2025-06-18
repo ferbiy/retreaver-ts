@@ -12,7 +12,7 @@
 
 export type PrepMatchCallback = (match: RegExpExecArray, matchIndex: number, characterOffset: number) => RegExpExecArray;
 export type ForceContextCallback = (el: Element) => boolean;
-export type ReplaceCallback = (...args: any[]) => string;
+export type ReplaceCallback = (...args: unknown[]) => string;
 export type RevertCallback = () => void;
 
 interface FindAndReplaceOptions {

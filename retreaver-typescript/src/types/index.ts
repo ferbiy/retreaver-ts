@@ -44,9 +44,9 @@ export interface TagCollection {
 
 // Callback types
 export type NumberCallback = (number: RetreaverNumber) => void;
-export type ErrorCallback = (error: any) => void;
+export type ErrorCallback = (error: Error | string | unknown) => void;
 export type CallCallback = (call: Call) => void;
-export type TagCallback = (data?: any) => void;
+export type TagCallback = (data?: Record<string, unknown>) => void;
 
 // Integration configurations
 export interface GoogleAnalyticsConfig {

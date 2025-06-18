@@ -4,7 +4,7 @@ import { Request } from './Request';
 import { Cookies } from './Cookies';
 import { DataConfig } from '../types';
 
-export type ModelCallback = (data: any) => void;
+export type ModelCallback = (data: Record<string, unknown>) => void;
 
 /**
  * Base model class for Retreaver library
