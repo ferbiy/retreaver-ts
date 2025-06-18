@@ -39,7 +39,6 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: 'https://github.com/retreaver/retreaverjs/tree/main/website/',
-          path: 'docs',
         },
         blog: {
           showReadingTime: true,
@@ -70,16 +69,6 @@ const config = {
             position: 'left',
             label: 'Docs',
           },
-          {
-            href: '../docs/api/index.html',
-            label: 'API Reference',
-            position: 'left',
-          },
-          {
-            href: '../playground/index.html',
-            label: 'Playground',
-            position: 'left',
-          },
           {to: '/blog', label: 'Blog', position: 'left'},
           {
             href: 'https://github.com/retreaver/retreaverjs',
@@ -97,10 +86,6 @@ const config = {
               {
                 label: 'Getting Started',
                 to: '/docs/getting-started/installation',
-              },
-              {
-                label: 'API Reference',
-                href: '../docs/api/index.html',
               },
             ],
           },
@@ -161,19 +146,6 @@ const config = {
     }),
 
   themes: ['@docusaurus/theme-live-codeblock'],
-  
-  // Removed the API docs plugin for now since it conflicts with TypeDoc
-  // plugins: [
-  //   [
-  //     '@docusaurus/plugin-content-docs',
-  //     {
-  //       id: 'api',
-  //       path: '../docs/api',
-  //       routeBasePath: 'api',
-  //       sidebarPath: require.resolve('./sidebars.api.js'),
-  //     },
-  //   ],
-  // ],
 };
 
 module.exports = config;
