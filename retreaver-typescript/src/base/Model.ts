@@ -1,43 +1,180 @@
+import { Helpers } from './Helpers';
 import { Data } from './Data';
-import { DataConfig } from '../types';
+import { Request } from './Request';
+import { Cookies } from './Cookies';
 
 /**
  * Base model class for Retreaver library
  * Maintains exact functionality from original model.js
  */
 export abstract class Model {
-  protected _data: Data;
+  protected api_host_uri: string = '/api/v1/';
+  protected type: string = 'model';
+  protected _store?: Data;
 
-  constructor(dataConfig: DataConfig) {
-    this._data = new Data(dataConfig);
+  private static primary_keys: Record<string, string> = {};
+  
+  static inflections: Record<string, string> = {
+    'number': 'numbers',
+    'campaign': 'campaigns'
+  };
+
+  /**
+   * Get or set the primary key for this model type
+   * @param primary_key - The primary key to set (optional)
+   * @returns The primary key for this model type
+   */
+  protected primaryKey(primary_key?: string): string {
+    return Model.primaryKey(this.type, primary_key);
   }
 
   /**
-   * Get data from the model
-   * @param keys - Optional keys to retrieve specific values
+   * Store data in the model
+   * @param data - Data to store
+   * @returns The data store instance
+   */
+  protected store(data?: any): Data | undefined {
+    if (typeof data !== 'undefined') {
+      const key = this.primaryKey();
+      if (typeof data[key] === 'undefined') {
+        throw new Error(`ArgumentError: Expected to receive primary_key ${key}`);
+      }
+      
+      if (typeof this._store === 'undefined') {
+        this._store = new Data({ type: this.type, primary_key: data[key] });
+      }
+      
+      this._store.merge(data);
+      Model.updateVisitorId(data);
+    }
+    return this._store;
+  }
+
+  /**
+   * Get data from API
+   * @param path - API path
+   * @param callback - Callback function
+   * @returns Request result
+   */
+  protected getData(path: string, callback?: Function): any {
+    const callbacks = callback ? [Model.update, callback] : [Model.update];
+    return this.connection().getJSON(this.api_host_uri + path, null, callbacks, this);
+  }
+
+  /**
+   * Post data to API
+   * @param path - API path
+   * @param data - Data to post
+   * @param callback - Callback function
+   * @returns Request result
+   */
+  protected postData(path: string, data: any, callback?: Function): any {
+    const callbacks = callback ? [Model.update, callback] : [Model.update];
+    return this.connection().postJSON(this.api_host_uri + path, data, callbacks, this);
+  }
+
+  /**
+   * Set a value with optional setter function
+   * @param key - The key to set
+   * @param value - The value to set
+   * @returns The set value
+   */
+  set(key: string, value: any): any {
+    const setterName = `set_${key}`;
+    if (typeof (this as any)[setterName] === 'function') {
+      value = (this as any)[setterName].apply(this, [value]);
+    }
+    return this._store!.set(key, value);
+  }
+
+  /**
+   * Get one or more values
+   * @param keys - Keys to retrieve
    * @returns The requested data
    */
-  get<T = any>(...keys: string[]): T {
-    return this._data.get<T>(...keys);
+  get(...keys: string[]): any {
+    return this._store!.get(...keys);
   }
 
   /**
-   * Set a value in the model
-   * @param key - The key to set
-   * @param value - The value to assign
-   * @returns The assigned value
+   * Get the connection instance
+   * @returns Request connection
    */
-  set<T>(key: string, value: T): T {
-    return this._data.set(key, value);
+  protected connection(): Request {
+    return Request.connection();
   }
 
   /**
-   * Merge an object into the model
-   * @param object - The object to merge
-   * @returns The merged object
+   * Update data store with response data
+   * @param data - Response data
+   * @returns The data
    */
-  merge<T extends Record<string, any>>(object: T): T {
-    return this._data.merge(object);
+  static update(data: any): any {
+    for (const key in data) {
+      const type = key;
+      const value = data[key];
+      const actualType = typeof Model.inflections[key] !== 'undefined' ? Model.inflections[key] : type;
+      
+      if (typeof Data.getStore()[actualType] !== 'undefined') {
+        if (Helpers.isArray(value)) {
+          for (let i = 0; i < value.length; i++) {
+            Model.updateRecord(actualType, value[i]);
+          }
+        } else {
+          Model.updateRecord(actualType, value);
+        }
+      }
+    }
+    return data;
+  }
+
+  /**
+   * Update a single record in the store
+   * @param type - Record type
+   * @param record - Record data
+   * @returns Success boolean
+   */
+  static updateRecord(type: string, record: any): boolean {
+    Model.updateVisitorId(record);
+    
+    if (typeof record.id !== 'undefined') {
+      const primary_key = Model.primaryKey(type);
+      const store = Data.getStore();
+      
+      for (const key in record) {
+        store[type][record[primary_key]][key] = record[key];
+      }
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Update visitor ID from record
+   * @param record - Record that may contain visitor_id
+   */
+  static updateVisitorId(record: any): void {
+    if (typeof record !== 'undefined' && typeof record.visitor_id !== 'undefined') {
+      Cookies.set('CallPixels-vid', record.visitor_id);
+    }
+  }
+
+  /**
+   * Get or set primary key for a type
+   * @param type - Model type
+   * @param primary_key - Primary key to set (optional)
+   * @returns The primary key
+   */
+  static primaryKey(type: string, primary_key?: string): string {
+    if (typeof Model.primary_keys[type] === 'undefined') {
+      Model.primary_keys[type] = 'id';
+    }
+    
+    if (typeof primary_key !== 'undefined') {
+      Model.primary_keys[type] = primary_key;
+    }
+    
+    return Model.primary_keys[type];
   }
 }
 

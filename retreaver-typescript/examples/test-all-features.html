@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retreaver TypeScript - Complete Functionality Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .test-result { margin: 10px 0; padding: 8px; border-radius: 3px; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        button { padding: 8px 16px; margin: 5px; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Retreaver TypeScript - Complete Functionality Test</h1>
+    <p>This page tests all major functionality of the Retreaver TypeScript library.</p>
+
+    <!-- Load the library -->
+    <script src="../dist/browser/retreaver.js"></script>
+
+    <div class="test-section">
+        <h2>1. Library Loading Test</h2>
+        <div id="loading-test"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Configuration Test</h2>
+        <button onclick="testConfiguration()">Test Configuration</button>
+        <div id="config-test"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Base Classes Test</h2>
+        <button onclick="testBaseClasses()">Test Base Classes</button>
+        <div id="base-test"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Campaign Creation Test</h2>
+        <button onclick="testCampaign()">Test Campaign</button>
+        <div id="campaign-test"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>5. Number Operations Test</h2>
+        <button onclick="testNumber()">Test Number</button>
+        <div id="number-test"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>6. Cache Test</h2>
+        <button onclick="testCache()">Test Cache</button>
+        <div id="cache-test"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>7. Backward Compatibility Test</h2>
+        <button onclick="testBackwardCompatibility()">Test Backward Compatibility</button>
+        <div id="compat-test"></div>
+    </div>
+
+    <script>
+        // Test Results Helper
+        function showResult(containerId, success, message) {
+            const container = document.getElementById(containerId);
+            const div = document.createElement('div');
+            div.className = 'test-result ' + (success ? 'success' : 'error');
+            div.textContent = (success ? '✓ ' : '✗ ') + message;
+            container.appendChild(div);
+        }
+
+        // 1. Test Library Loading
+        function testLibraryLoading() {
+            try {
+                if (typeof window.Retreaver !== 'undefined') {
+                    showResult('loading-test', true, 'Retreaver library loaded successfully');
+                    
+                    if (typeof window.Retreaver.configure === 'function') {
+                        showResult('loading-test', true, 'configure function available');
+                    } else {
+                        showResult('loading-test', false, 'configure function not available');
+                    }
+                    
+                    if (typeof window.Retreaver.Campaign === 'function') {
+                        showResult('loading-test', true, 'Campaign class available');
+                    } else {
+                        showResult('loading-test', false, 'Campaign class not available');
+                    }
+                    
+                    if (typeof window.Retreaver.Number === 'function') {
+                        showResult('loading-test', true, 'Number class available');
+                    } else {
+                        showResult('loading-test', false, 'Number class not available');
+                    }
+                    
+                } else {
+                    showResult('loading-test', false, 'Retreaver library not loaded');
+                }
+            } catch (error) {
+                showResult('loading-test', false, 'Error testing library loading: ' + error.message);
+            }
+        }
+
+        // 2. Test Configuration
+        function testConfiguration() {
+            document.getElementById('config-test').innerHTML = '';
+            try {
+                // Test configuration
+                window.Retreaver.configure({
+                    host: 'api.rtvrapi.com',
+                    prefix: 'https'
+                });
+                showResult('config-test', true, 'Configuration successful');
+                
+                // Test Base classes accessibility
+                if (window.Retreaver.Base) {
+                    showResult('config-test', true, 'Base classes accessible');
+                    
+                    if (window.Retreaver.Base.Helpers) {
+                        showResult('config-test', true, 'Helpers class accessible');
+                    }
+                    
+                    if (window.Retreaver.Base.Request) {
+                        showResult('config-test', true, 'Request class accessible');
+                    }
+                    
+                    if (window.Retreaver.Base.Cookies) {
+                        showResult('config-test', true, 'Cookies class accessible');
+                    }
+                }
+                
+            } catch (error) {
+                showResult('config-test', false, 'Configuration failed: ' + error.message);
+            }
+        }
+
+        // 3. Test Base Classes
+        function testBaseClasses() {
+            document.getElementById('base-test').innerHTML = '';
+            try {
+                // Test Helpers
+                if (window.Retreaver.Base.Helpers.isArray([1, 2, 3])) {
+                    showResult('base-test', true, 'Helpers.isArray works correctly');
+                } else {
+                    showResult('base-test', false, 'Helpers.isArray failed');
+                }
+                
+                // Test IE version detection
+                const ieVersion = window.Retreaver.Base.Helpers.ieVersion();
+                showResult('base-test', true, 'IE version detection: ' + (ieVersion || 'Not IE'));
+                
+                // Test Cookies
+                if (window.Retreaver.Base.Cookies.areEnabled()) {
+                    showResult('base-test', true, 'Cookies are enabled');
+                    window.Retreaver.Base.Cookies.set('test-cookie', 'test-value');
+                    if (window.Retreaver.Base.Cookies.get('test-cookie') === 'test-value') {
+                        showResult('base-test', true, 'Cookie set/get works correctly');
+                    } else {
+                        showResult('base-test', false, 'Cookie set/get failed');
+                    }
+                } else {
+                    showResult('base-test', false, 'Cookies are disabled');
+                }
+                
+                // Test Base64
+                const testString = 'Hello, Retreaver!';
+                const encoded = window.Retreaver.Base.Base64.encode(testString);
+                const decoded = window.Retreaver.Base.Base64.decode(encoded);
+                if (decoded === testString) {
+                    showResult('base-test', true, 'Base64 encode/decode works correctly');
+                } else {
+                    showResult('base-test', false, 'Base64 encode/decode failed');
+                }
+                
+            } catch (error) {
+                showResult('base-test', false, 'Base classes test failed: ' + error.message);
+            }
+        }
+
+        // 4. Test Campaign
+        function testCampaign() {
+            document.getElementById('campaign-test').innerHTML = '';
+            try {
+                // Create a campaign (with dummy key for testing)
+                const campaign = new window.Retreaver.Campaign({
+                    campaign_key: 'test-campaign-key-12345'
+                });
+                
+                showResult('campaign-test', true, 'Campaign instance created successfully');
+                
+                // Test setting campaign data
+                campaign.set('test_key', 'test_value');
+                if (campaign.get('test_key') === 'test_value') {
+                    showResult('campaign-test', true, 'Campaign set/get works correctly');
+                } else {
+                    showResult('campaign-test', false, 'Campaign set/get failed');
+                }
+                
+                // Test campaign key access
+                if (campaign.get('campaign_key') === 'test-campaign-key-12345') {
+                    showResult('campaign-test', true, 'Campaign key stored correctly');
+                } else {
+                    showResult('campaign-test', false, 'Campaign key not stored correctly');
+                }
+                
+                // Test numbers array (should be empty initially)
+                const numbers = campaign.numbers();
+                if (Array.isArray(numbers)) {
+                    showResult('campaign-test', true, 'Campaign.numbers() returns array');
+                } else {
+                    showResult('campaign-test', false, 'Campaign.numbers() does not return array');
+                }
+                
+            } catch (error) {
+                showResult('campaign-test', false, 'Campaign test failed: ' + error.message);
+            }
+        }
+
+        // 5. Test Number
+        function testNumber() {
+            document.getElementById('number-test').innerHTML = '';
+            try {
+                // Create a number with dummy data
+                const numberData = {
+                    id: 12345,
+                    campaign_key: 'test-campaign-key',
+                    formatted_number: '(555) 123-4567',
+                    number: '5551234567',
+                    plain_number: '5551234567',
+                    target_open: true,
+                    is_per_visitor: false,
+                    tag_values: {
+                        'source': 'google',
+                        'medium': 'cpc'
+                    }
+                };
+                
+                const number = new window.Retreaver.Number(numberData);
+                showResult('number-test', true, 'Number instance created successfully');
+                
+                // Test number data access
+                if (number.get('formatted_number') === '(555) 123-4567') {
+                    showResult('number-test', true, 'Number data access works correctly');
+                } else {
+                    showResult('number-test', false, 'Number data access failed');
+                }
+                
+                // Test tag access
+                const tags = number.get('tag_values');
+                if (tags && tags.source === 'google') {
+                    showResult('number-test', true, 'Number tag access works correctly');
+                } else {
+                    showResult('number-test', false, 'Number tag access failed');
+                }
+                
+                // Test setting new data
+                number.set('custom_field', 'custom_value');
+                if (number.get('custom_field') === 'custom_value') {
+                    showResult('number-test', true, 'Number set operation works correctly');
+                } else {
+                    showResult('number-test', false, 'Number set operation failed');
+                }
+                
+            } catch (error) {
+                showResult('number-test', false, 'Number test failed: ' + error.message);
+            }
+        }
+
+        // 6. Test Cache
+        function testCache() {
+            document.getElementById('cache-test').innerHTML = '';
+            try {
+                // Test cache operations
+                window.Retreaver.Cache['test_key'] = 'test_value';
+                if (window.Retreaver.Cache['test_key'] === 'test_value') {
+                    showResult('cache-test', true, 'Cache set/get works correctly');
+                } else {
+                    showResult('cache-test', false, 'Cache set/get failed');
+                }
+                
+                // Test cache is an object
+                if (typeof window.Retreaver.Cache === 'object') {
+                    showResult('cache-test', true, 'Cache is properly initialized as object');
+                } else {
+                    showResult('cache-test', false, 'Cache is not properly initialized');
+                }
+                
+            } catch (error) {
+                showResult('cache-test', false, 'Cache test failed: ' + error.message);
+            }
+        }
+
+        // 7. Test Backward Compatibility
+        function testBackwardCompatibility() {
+            document.getElementById('compat-test').innerHTML = '';
+            try {
+                // Test global namespace
+                if (typeof window.Retreaver !== 'undefined') {
+                    showResult('compat-test', true, 'Global Retreaver namespace available');
+                }
+                
+                // Test CallPixels alias
+                if (typeof window.CallPixels !== 'undefined') {
+                    showResult('compat-test', true, 'CallPixels alias available');
+                } else {
+                    showResult('compat-test', false, 'CallPixels alias not available');
+                }
+                
+                // Test vendor namespace
+                if (window.Retreaver.Vendor && window.Retreaver.Vendor.findAndReplaceDOMText) {
+                    showResult('compat-test', true, 'Vendor utilities available');
+                } else {
+                    showResult('compat-test', false, 'Vendor utilities not available');
+                }
+                
+                // Test that original API structure is maintained
+                const expectedStructure = [
+                    'configure', 'Campaign', 'Number', 'Base', 'Cache', 'Vendor'
+                ];
+                
+                let allPresent = true;
+                for (const prop of expectedStructure) {
+                    if (!(prop in window.Retreaver)) {
+                        allPresent = false;
+                        showResult('compat-test', false, 'Missing property: ' + prop);
+                    }
+                }
+                
+                if (allPresent) {
+                    showResult('compat-test', true, 'All expected API properties present');
+                }
+                
+            } catch (error) {
+                showResult('compat-test', false, 'Backward compatibility test failed: ' + error.message);
+            }
+        }
+
+        // Run loading test immediately
+        window.addEventListener('load', function() {
+            testLibraryLoading();
+        });
+    </script>
+</body>
+</html>
