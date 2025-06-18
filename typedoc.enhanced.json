@@ -1,0 +1,66 @@
+{
+  "entryPoints": ["src/index.ts"],
+  "out": "docs/api",
+  "theme": "default",
+  "excludePrivate": true,
+  "excludeProtected": false,
+  "excludeExternals": true,
+  "excludeInternal": false,
+  "readme": "README.md",
+  "name": "Retreaver JavaScript API",
+  "includeVersion": true,
+  "sort": ["source-order"],
+  "categorizeByGroup": true,
+  "defaultCategory": "Other",
+  "categoryOrder": [
+    "Core",
+    "Models", 
+    "Utilities",
+    "Types",
+    "Other"
+  ],
+  "groupOrder": [
+    "Classes",
+    "Interfaces", 
+    "Type Aliases",
+    "Functions",
+    "Variables"
+  ],
+  "searchInComments": true,
+  "validation": {
+    "notExported": false,
+    "invalidLink": true,
+    "notDocumented": false
+  },
+  "treatWarningsAsErrors": false,
+  "cleanOutputDir": true,
+  "navigation": {
+    "includeCategories": true,
+    "includeGroups": true
+  },
+  "kindSortOrder": [
+    "Project", 
+    "Module",
+    "Namespace",
+    "Enum",
+    "EnumMember",
+    "Class",
+    "Interface",
+    "TypeAlias",
+    "Constructor",
+    "Property",
+    "Variable",
+    "Function",
+    "Accessor",
+    "Method",
+    "Parameter",
+    "TypeParameter",
+    "TypeLiteral",
+    "CallSignature",
+    "ConstructorSignature",
+    "IndexSignature",
+    "GetSignature",
+    "SetSignature"
+  ],
+  "titleLink": "https://github.com/retreaver/retreaverjs"
+}

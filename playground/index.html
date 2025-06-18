@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retreaver JS Playground</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" media="(prefers-color-scheme: dark)">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            height: calc(100vh - 120px);
+        }
+        
+        .panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .panel-header {
+            background: #3498db;
+            color: white;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .panel-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .editor {
+            flex: 1;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            border: none;
+            padding: 1.5rem;
+            resize: none;
+            outline: none;
+            background: #2d3748;
+            color: #e2e8f0;
+            line-height: 1.5;
+        }
+        
+        .output {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background: #f8f9fa;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            border: none;
+            outline: none;
+        }
+        
+        .config-section {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+            background: #f8f9fa;
+        }
+        
+        .config-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+            align-items: center;
+        }
+        
+        .config-row label {
+            font-weight: 500;
+            min-width: 120px;
+            color: #495057;
+        }
+        
+        .config-row input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .actions {
+            padding: 1rem 1.5rem;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+        
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #229954;
+        }
+        
+        .examples {
+            padding: 1rem 1.5rem;
+            background: #e8f4fd;
+            border-top: 1px solid #bee5eb;
+        }
+        
+        .example-btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            background: white;
+            border: 1px solid #3498db;
+            color: #3498db;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .example-btn:hover {
+            background: #3498db;
+            color: white;
+        }
+        
+        .log-entry {
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        
+        .log-info {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .log-error {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            color: #c62828;
+        }
+        
+        .log-success {
+            background: #e8f5e8;
+            border-left: 4px solid #4caf50;
+            color: #2e7d32;
+        }
+        
+        .phone-display {
+            background: #27ae60;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 Retreaver JS Playground</h1>
+        <p>Test the Retreaver JavaScript API interactively in your browser</p>
+    </div>
+
+    <div class="container">
+        <div class="panel">
+            <div class="panel-header">
+                <span>📝 Code Editor</span>
+                <span>TypeScript/JavaScript</span>
+            </div>
+            <div class="panel-content">
+                <div class="config-section">
+                    <div class="config-row">
+                        <label>API Host:</label>
+                        <input type="text" id="api-host" value="api.rtvrapi.com" placeholder="API hostname">
+                    </div>
+                    <div class="config-row">
+                        <label>Campaign Key:</label>
+                        <input type="text" id="campaign-key" value="67d9fb1917ae8f4eaff36831b41788c3" placeholder="Your campaign key">
+                    </div>
+                </div>
+                <textarea class="editor" id="code-editor" placeholder="Enter your JavaScript/TypeScript code here...">
+// Welcome to the Retreaver JS Playground!
+// Try these examples or write your own code
+
+// Configure the library
+Retreaver.configure({
+  host: 'api.rtvrapi.com',
+  prefix: 'https'
+});
+
+// Create a campaign
+const campaign = new Retreaver.Campaign({ 
+  campaign_key: '67d9fb1917ae8f4eaff36831b41788c3' 
+});
+
+// Request a number with tags
+campaign.requestNumber({ 
+  visitor_type: 'premium',
+  source: 'playground' 
+}, (number) => {
+  console.log('✅ Number received:', number.get('formatted_number'));
+  
+  // Display the number
+  displayPhone(number.get('formatted_number'));
+  
+  // Add additional tags
+  number.addTags({ 
+    timestamp: new Date().toISOString(),
+    page: 'playground'
+  });
+  
+}, (error) => {
+  console.error('❌ Error requesting number:', error);
+});
+                </textarea>
+                <div class="examples">
+                    <strong>📚 Quick Examples:</strong>
+                    <span class="example-btn" onclick="loadExample('basic')">Basic Request</span>
+                    <span class="example-btn" onclick="loadExample('tags')">With Tags</span>
+                    <span class="example-btn" onclick="loadExample('callback')">Error Handling</span>
+                    <span class="example-btn" onclick="loadExample('auto-replace')">Auto Replace</span>
+                    <span class="example-btn" onclick="loadExample('multiple')">Multiple Numbers</span>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-primary" onclick="runCode()">▶️ Run Code</button>
+                    <button class="btn btn-secondary" onclick="clearOutput()">🗑️ Clear Output</button>
+                    <button class="btn btn-success" onclick="copyShareLink()">🔗 Share Code</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <span>📊 Output & Console</span>
+                <span id="status">Ready</span>
+            </div>
+            <div class="panel-content">
+                <div id="phone-display" class="phone-display" style="display: none;">
+                    📞 <span id="phone-number">No number yet</span>
+                </div>
+                <div class="output" id="output">Welcome to the Retreaver JS Playground!
+
+🎯 This interactive environment lets you test the Retreaver JavaScript API in real-time.
+
+📝 How to use:
+1. Configure your API host and campaign key above
+2. Write or select example code in the editor
+3. Click "Run Code" to execute
+4. See results here in real-time
+
+💡 Try the example buttons to get started quickly!
+
+Console output will appear here...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Retreaver JS Library -->
+    <script src="https://unpkg.com/@retreaver/retreaver-js/dist/browser/retreaver.js"></script>
+    
+    <script>
+        // Playground functionality
+        let outputElement = document.getElementById('output');
+        let codeEditor = document.getElementById('code-editor');
+        let phoneDisplay = document.getElementById('phone-display');
+        let phoneNumber = document.getElementById('phone-number');
+        let statusElement = document.getElementById('status');
+
+        // Override console methods to capture output
+        const originalConsole = {
+            log: console.log,
+            error: console.error,
+            warn: console.warn,
+            info: console.info
+        };
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry log-${type}`;
+            logEntry.innerHTML = `<strong>[${timestamp}]</strong> ${message}`;
+            outputElement.appendChild(logEntry);
+            outputElement.scrollTop = outputElement.scrollHeight;
+            
+            // Also log to original console
+            originalConsole[type] && originalConsole[type](message);
+        }
+
+        // Override console methods
+        console.log = (msg) => log(msg, 'info');
+        console.error = (msg) => log(msg, 'error');
+        console.warn = (msg) => log(msg, 'warn');
+        console.info = (msg) => log(msg, 'info');
+
+        // Display phone number function
+        window.displayPhone = function(number) {
+            phoneNumber.textContent = number;
+            phoneDisplay.style.display = 'block';
+        };
+
+        function setStatus(status, type = 'info') {
+            statusElement.textContent = status;
+            statusElement.style.color = type === 'error' ? '#e74c3c' : type === 'success' ? '#27ae60' : '#3498db';
+        }
+
+        function runCode() {
+            setStatus('Running...', 'info');
+            phoneDisplay.style.display = 'none';
+            
+            try {
+                // Update configuration from inputs
+                const host = document.getElementById('api-host').value;
+                const campaignKey = document.getElementById('campaign-key').value;
+                
+                // Replace placeholders in code
+                let code = codeEditor.value;
+                code = code.replace(/api\.rtvrapi\.com/g, host);
+                code = code.replace(/67d9fb1917ae8f4eaff36831b41788c3/g, campaignKey);
+                
+                // Execute the code
+                eval(code);
+                
+                setStatus('✅ Code executed', 'success');
+                log('Code executed successfully', 'success');
+            } catch (error) {
+                setStatus('❌ Error', 'error');
+                log(`Error: ${error.message}`, 'error');
+            }
+        }
+
+        function clearOutput() {
+            outputElement.innerHTML = 'Console cleared...\n';
+            phoneDisplay.style.display = 'none';
+            setStatus('Ready', 'info');
+        }
+
+        function copyShareLink() {
+            const code = encodeURIComponent(codeEditor.value);
+            const url = `${window.location.origin}${window.location.pathname}?code=${code}`;
+            navigator.clipboard.writeText(url).then(() => {
+                setStatus('📋 Link copied!', 'success');
+                setTimeout(() => setStatus('Ready', 'info'), 2000);
+            });
+        }
+
+        // Example code snippets
+        const examples = {
+            basic: `// Basic number request
+const campaign = new Retreaver.Campaign({ 
+  campaign_key: '67d9fb1917ae8f4eaff36831b41788c3' 
+});
+
+campaign.requestNumber((number) => {
+  console.log('Phone number:', number.get('formatted_number'));
+  displayPhone(number.get('formatted_number'));
+});`,
+            
+            tags: `// Request with custom tags
+const campaign = new Retreaver.Campaign({ 
+  campaign_key: '67d9fb1917ae8f4eaff36831b41788c3' 
+});
+
+campaign.requestNumber({ 
+  visitor_type: 'premium',
+  source: 'website',
+  page: window.location.pathname
+}, (number) => {
+  console.log('Tagged number:', number.get('formatted_number'));
+  displayPhone(number.get('formatted_number'));
+  
+  // View all current tags
+  console.log('Current tags:', number.get('tag_values'));
+});`,
+            
+            callback: `// With error handling
+const campaign = new Retreaver.Campaign({ 
+  campaign_key: '67d9fb1917ae8f4eaff36831b41788c3' 
+});
+
+campaign.requestNumber({ 
+  test: 'error-handling' 
+}, (number) => {
+  console.log('✅ Success:', number.get('formatted_number'));
+  displayPhone(number.get('formatted_number'));
+}, (error) => {
+  console.error('❌ Request failed:', error);
+  console.log('💡 Check your campaign key and try again');
+});`,
+            
+            'auto-replace': `// Auto-replace numbers on page
+const campaign = new Retreaver.Campaign({ 
+  campaign_key: '67d9fb1917ae8f4eaff36831b41788c3' 
+});
+
+// This will automatically replace phone numbers
+// found on the page with tracked numbers
+campaign.autoReplaceNumbers({ 
+  source: 'auto-replace',
+  page_type: 'playground'
+}, (number) => {
+  console.log('Auto-replaced number:', number.get('formatted_number'));
+  displayPhone(number.get('formatted_number'));
+});`,
+            
+            multiple: `// Request multiple numbers
+const campaign = new Retreaver.Campaign({ 
+  campaign_key: '67d9fb1917ae8f4eaff36831b41788c3' 
+});
+
+// Request first number for sales
+campaign.requestNumber({ 
+  department: 'sales' 
+}, (number) => {
+  console.log('Sales number:', number.get('formatted_number'));
+  displayPhone('Sales: ' + number.get('formatted_number'));
+});
+
+// Request second number for support
+setTimeout(() => {
+  campaign.requestNumber({ 
+    department: 'support' 
+  }, (number) => {
+    console.log('Support number:', number.get('formatted_number'));
+    displayPhone('Support: ' + number.get('formatted_number'));
+  });
+}, 1000);`
+        };
+
+        function loadExample(key) {
+            if (examples[key]) {
+                codeEditor.value = examples[key];
+                log(`Loaded example: ${key}`, 'info');
+            }
+        }
+
+        // Load code from URL parameter if present
+        window.addEventListener('load', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            if (code) {
+                try {
+                    codeEditor.value = decodeURIComponent(code);
+                    log('Code loaded from share link', 'info');
+                } catch (e) {
+                    log('Failed to load code from URL', 'error');
+                }
+            }
+        });
+
+        // Auto-resize editor
+        codeEditor.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+
+        log('🚀 Playground ready! Try running some code or select an example.', 'success');
+    </script>
+</body>
+</html>

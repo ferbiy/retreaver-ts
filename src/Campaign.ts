@@ -16,37 +16,133 @@ import {
 } from './types';
 
 /**
- * Campaign class for Retreaver library
- * Maintains exact functionality from original campaign.js including all integrations
+ * # Campaign Class
+ * 
+ * The Campaign class is the primary interface for requesting phone numbers from Retreaver.
+ * It handles all aspects of number retrieval, including tag management, third-party integrations,
+ * and automatic number replacement on web pages.
+ * 
+ * ## Features
+ * - **Phone Number Requests**: Get tracked phone numbers for campaigns
+ * - **Tag Management**: Associate custom data with number requests
+ * - **Auto Number Replacement**: Automatically replace existing numbers on pages
+ * - **Third-party Integrations**: Built-in support for Google Analytics, TrueCall, RedTrack, and ClickFlare
+ * - **Error Handling**: Comprehensive error callbacks and validation
+ * 
+ * @example
+ * ```typescript
+ * // Basic usage
+ * const campaign = new Campaign({ 
+ *   campaign_key: 'your-campaign-key' 
+ * });
+ * 
+ * // Request a number with tags
+ * campaign.requestNumber({ 
+ *   visitor_type: 'premium',
+ *   source: 'website'
+ * }, (number) => {
+ *   console.log('Phone:', number.get('formatted_number'));
+ * });
+ * ```
+ * 
+ * @category Core
+ * @since 1.0.0
  */
 export class Campaign extends Model {
   protected type = 'campaigns';
 
+  /**
+   * Creates a new Campaign instance.
+   * 
+   * @param options - Campaign configuration containing the campaign key
+   * 
+   * @example
+   * ```typescript
+   * const campaign = new Campaign({ 
+   *   campaign_key: '67d9fb1917ae8f4eaff36831b41788c3' 
+   * });
+   * ```
+   */
   constructor(options: CampaignOptions) {
     super();
     this.initialize(options);
   }
 
+  /**
+   * Initializes the campaign with the provided data.
+   * 
+   * @internal
+   * @param data - Campaign options to store
+   */
   private initialize(data: CampaignOptions): void {
     this.store(data);
   }
 
   /**
-   * Fetch a campaign number
-   * @param callback - Callback fired if the request completes successfully
+   * # Request Number
+   * 
+   * Requests a tracked phone number from the campaign. This is the primary method for 
+   * getting phone numbers that track incoming calls and can be associated with custom tags.
+   * 
+   * ## Overloads
+   * 
+   * 1. **Simple Request**: `requestNumber(callback)` - Get a number without tags
+   * 2. **Tagged Request**: `requestNumber(tags, callback)` - Get a number with tags
+   * 3. **Full Request**: `requestNumber(tags, callback, errorCallback)` - Get a number with full error handling
+   * 
+   * ## Automatic Integrations
+   * 
+   * When a number is successfully retrieved, the following integrations are automatically attempted:
+   * - **Google Analytics**: Session and client ID tracking
+   * - **TrueCall**: Dynamic number assignment
+   * - **RedTrack**: Click ID extraction
+   * - **ClickFlare**: Event token tracking
+   * 
+   * @param callback - Callback fired when the request completes successfully
+   * 
+   * @example
+   * ```typescript
+   * // Simple request
+   * campaign.requestNumber((number) => {
+   *   document.getElementById('phone').textContent = number.get('formatted_number');
+   * });
+   * ```
    */
   requestNumber(callback: NumberCallback): void;
   /**
-   * Fetch a campaign number
-   * @param tags - A collection of tags as key-value pairs
-   * @param callback - Callback fired if the request completes successfully
+   * @param tags - A collection of tags as key-value pairs to associate with the number
+   * @param callback - Callback fired when the request completes successfully
+   * 
+   * @example
+   * ```typescript
+   * // Request with tags
+   * campaign.requestNumber({ 
+   *   visitor_type: 'premium',
+   *   source: 'homepage',
+   *   utm_campaign: 'summer_sale'
+   * }, (number) => {
+   *   console.log('Tagged number:', number.get('formatted_number'));
+   * });
+   * ```
    */
   requestNumber(tags: TagCollection, callback: NumberCallback): void;
   /**
-   * Fetch a campaign number
-   * @param tags - A collection of tags as key-value pairs
-   * @param callback - Callback fired if the request completes successfully
-   * @param errorCallback - Callback fired if the request raises an error
+   * @param tags - A collection of tags as key-value pairs to associate with the number
+   * @param callback - Callback fired when the request completes successfully
+   * @param errorCallback - Callback fired if the request encounters an error
+   * 
+   * @example
+   * ```typescript
+   * // Full request with error handling
+   * campaign.requestNumber({ 
+   *   lead_score: '85',
+   *   priority: 'high'
+   * }, (number) => {
+   *   console.log('Success:', number.get('formatted_number'));
+   * }, (error) => {
+   *   console.error('Failed to get number:', error);
+   * });
+   * ```
    */
   requestNumber(tags: TagCollection, callback: NumberCallback, errorCallback: ErrorCallback): void;
   requestNumber(
@@ -127,11 +223,38 @@ export class Campaign extends Model {
   }
 
   /**
-   * Auto replace all numbers on page according to campaign settings
-   * Calls campaign.requestNumber
-   * @param tags - A collection of tags as key-value pairs
-   * @param callback - Callback fired if the request completes successfully
-   * @param errorCallback - Callback fired if the request raises an error
+   * # Auto Replace Numbers
+   * 
+   * Automatically replaces all phone numbers found on the current page with tracked 
+   * Retreaver numbers according to campaign settings. This is useful for automatically 
+   * converting static phone numbers into tracked numbers without manual intervention.
+   * 
+   * ## How it Works
+   * 
+   * 1. Requests a number from the campaign (same as `requestNumber`)
+   * 2. If the response includes replacement rules, scans the page for matching numbers
+   * 3. Replaces found numbers in both text content and `href` attributes
+   * 4. Supports `tel:` links and various click-tracking formats
+   * 
+   * @param tags - Optional tags to associate with the number request
+   * @param callback - Optional callback fired when replacement completes successfully
+   * @param errorCallback - Optional callback fired if the request encounters an error
+   * 
+   * @example
+   * ```typescript
+   * // Basic auto-replacement
+   * campaign.autoReplaceNumbers();
+   * 
+   * // With tags and callbacks
+   * campaign.autoReplaceNumbers({ 
+   *   page_type: 'landing',
+   *   auto_replace: 'true'
+   * }, (number) => {
+   *   console.log('Page numbers replaced with:', number.get('formatted_number'));
+   * }, (error) => {
+   *   console.error('Auto-replace failed:', error);
+   * });
+   * ```
    */
   autoReplaceNumbers(
     tags?: TagCollection,
@@ -150,8 +273,25 @@ export class Campaign extends Model {
   }
 
   /**
-   * Get all numbers for this campaign
-   * @returns Array of numbers matching this campaign
+   * # Get Campaign Numbers
+   * 
+   * Retrieves all numbers that have been requested for this campaign during the current session.
+   * This is useful for tracking multiple numbers or implementing advanced number management.
+   * 
+   * @returns Array of RetreaverNumber instances for this campaign
+   * 
+   * @example
+   * ```typescript
+   * // Get all numbers for this campaign
+   * const numbers = campaign.numbers();
+   * numbers.forEach(number => {
+   *   console.log('Number:', number.get('formatted_number'));
+   *   console.log('Tags:', number.get('tag_values'));
+   * });
+   * 
+   * // Check how many numbers have been requested
+   * console.log(`${numbers.length} numbers requested for this campaign`);
+   * ```
    */
   numbers(): RetreaverNumber[] {
     const output: RetreaverNumber[] = [];
@@ -176,9 +316,12 @@ export class Campaign extends Model {
   }
 
   /**
-   * Set number matching tags (with validation)
-   * @param tags - Tags to set
+   * Sets and validates number matching tags.
+   * 
+   * @internal
+   * @param tags - Tags to validate and set
    * @returns Validated tags object
+   * @throws {Error} When tags are not in the expected format
    */
   setNumberMatchingTags(tags: TagCollection | string): TagCollection {
     if (typeof tags === 'string') {
