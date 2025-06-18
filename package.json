@@ -1,15 +1,36 @@
 {
-  "name": "retreaver",
-  "description": "Retreaver Javascript API",
-  "version": "0.2.25",
-  "homepage": "https://github.com/retreaver/retreaverjs",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/retreaver/retreaverjs.git"
+  "name": "@retreaver/retreaver-js",
+  "version": "1.0.0",
+  "description": "Retreaver JavaScript API - TypeScript edition",
+  "main": "dist/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "npm run build:cjs && npm run build:esm && npm run build:browser",
+    "build:cjs": "tsc --project tsconfig.json",
+    "build:esm": "tsc --project tsconfig.esm.json",
+    "build:browser": "webpack --config webpack.config.js",
+    "build:dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build",
+    "lint": "tsc --noEmit",
+    "test": "echo \"No tests specified\" && exit 0"
   },
-  "bugs": {
-    "url": "https://github.com/retreaver/retreaverjs/issues"
-  },
+  "keywords": [
+    "retreaver",
+    "callpixels",
+    "phone",
+    "tracking",
+    "call",
+    "number",
+    "campaign",
+    "typescript"
+  ],
   "author": {
     "name": "Blake Hilscher",
     "email": "blake@retreaver.com",
@@ -32,28 +53,24 @@
       "url": "http://retreaver.com/"
     }
   ],
-  "licenses": [
-    {
-      "type": "GPLv3",
-      "url": "http://github.com/retreaver/retreaverjs/blob/master/LICENSE"
-    }
-  ],
-  "main": "src/package.js",
-  "engines": {
-    "node": ">= 0.6.x"
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/retreaver/retreaverjs.git"
   },
-  "dependencies": {},
+  "bugs": {
+    "url": "https://github.com/retreaver/retreaverjs/issues"
+  },
+  "homepage": "https://github.com/retreaver/retreaverjs",
+  "engines": {
+    "node": ">= 14.0.0"
+  },
   "devDependencies": {
-    "catharsis": "0.9.0",
-    "grunt": "0.4.5",
-    "grunt-contrib-concat": "0.4.0",
-    "grunt-contrib-jshint": "0.10.0",
-    "grunt-contrib-nodeunit": "0.4.1",
-    "grunt-contrib-uglify": "0.5.1",
-    "grunt-contrib-watch": "0.6.1",
-    "jsdoc": "3.2.2",
-    "marked": "4.0.14",
-    "taffydb": "2.7.3",
-    "underscore": "1.13.2"
-  }
+    "typescript": "^5.2.0",
+    "webpack": "^5.88.0",
+    "webpack-cli": "^5.1.0",
+    "ts-loader": "^9.4.0"
+  },
+  "peerDependencies": {},
+  "dependencies": {}
 }
